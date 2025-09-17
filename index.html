@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AI Tools Directory</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    body {
+      background: #121212;
+      color: #eee;
+      min-height: 100vh;
+      padding: 30px 15px;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+    body.light-mode {
+      background: #f5f5f5;
+      color: #222;
+    }
+    header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    header h1 {
+      font-size: 2.8rem;
+      color: #00e676;
+      letter-spacing: 2px;
+      margin-bottom: 10px;
+      transition: color 0.3s;
+    }
+    body.light-mode header h1 {
+      color: #0077cc;
+    }
+    header input {
+      padding: 12px 20px;
+      width: 100%;
+      max-width: 400px;
+      border: none;
+      border-radius: 30px;
+      outline: none;
+      font-size: 1rem;
+      background: #222;
+      color: #eee;
+      margin-bottom: 20px;
+      box-shadow: 0 0 15px rgba(0,230,118,0.6);
+      transition: background-color 0.3s, color 0.3s;
+    }
+    body.light-mode header input {
+      background: #ddd;
+      color: #222;
+      box-shadow: 0 0 15px rgba(0, 119, 204, 0.4);
+    }
+    header .toggle-btn {
+      margin-top: 10px;
+      padding: 8px 14px;
+      background: #00e676;
+      color: #121212;
+      border: none;
+      border-radius: 20px;
+      cursor: pointer;
+      transition: background 0.3s, color 0.3s;
+    }
+    body.light-mode header .toggle-btn {
+      background: #0077cc;
+      color: #f5f5f5;
+    }
+    header input::placeholder {
+      color: #777;
+    }
+    header input.light-mode::placeholder {
+      color: #999;
+    }
+    .category-section {
+      max-width: 1200px;
+      width: 100%;
+      margin-bottom: 50px;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+    .category-section.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .category-title {
+      font-size: 1.9rem;
+      color: #00e676;
+      margin-bottom: 20px;
+      border-bottom: 2px solid #00e676;
+      padding-bottom: 5px;
+      transition: color 0.3s, border-color 0.3s;
+    }
+    body.light-mode .category-title {
+      color: #0077cc;
+      border-color: #0077cc;
+    }
+    .ai-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px,1fr));
+      gap: 25px;
+    }
+    .ai-card {
+      background: #1e1e1e;
+      padding: 20px;
+      border-radius: 16px;
+      box-shadow: 0 0 15px #00e676aa;
+      transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      cursor: pointer;
+      position: relative;
+    }
+    body.light-mode .ai-card {
+      background: #fff;
+      box-shadow: 0 0 15px #0077cc55;
+    }
+    .ai-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 0 30px #00e676ff;
+    }
+    body.light-mode .ai-card:hover {
+      box-shadow: 0 0 30px #0077ccff;
+    }
+    .ai-logo {
+      width: 80px;
+      height: 80px;
+      object-fit: contain;
+      margin-bottom: 15px;
+      filter: drop-shadow(0 0 4px #00e676);
+      transition: filter 0.3s;
+    }
+    body.light-mode .ai-logo {
+      filter: drop-shadow(0 0 4px #0077cc);
+    }
+    .ai-name {
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin-bottom: 10px;
+      color: #00e676;
+      transition: color 0.3s;
+    }
+    body.light-mode .ai-name {
+      color: #0077cc;
+    }
+    .ai-desc {
+      font-size: 1rem;
+      color: #bbb;
+      flex-grow: 1;
+      transition: color 0.3s;
+    }
+    body.light-mode .ai-desc {
+      color: #666;
+    }
+    .ai-price {
+      background: #333;
+      color: #00e676;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      margin-top: 10px;
+      transition: background-color 0.3s, color 0.3s;
+    }
+    body.light-mode .ai-price {
+      background: #ececec;
+      color: #0077cc;
+    }
+    footer {
+      text-align: center;
+      margin-top: 40px;
+      font-size: 0.9rem;
+      color: #777;
+      transition: color 0.3s;
+    }
+    body.light-mode footer {
+      color: #555;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>AI Tools Directory</h1>
+    <input type="search" id="search-input" placeholder="Search tools by name or category...">
+    <button class="toggle-btn" id="modeToggle">Toggle Light / Dark Mode</button>
+  </header>
+
+  <!-- Categories -->
+  <div class="category-section" id="Writing">
+    <div class="category-title">Writing & Content</div>
+    <div class="ai-container" id="container-Writing"></div>
+  </div>
+
+  <div class="category-section" id="ImageGen">
+    <div class="category-title">Image / Art Generation</div>
+    <div class="ai-container" id="container-ImageGen"></div>
+  </div>
+
+  <div class="category-section" id="CodeAssist">
+    <div class="category-title">Code Assist / Development</div>
+    <div class="ai-container" id="container-CodeAssist"></div>
+  </div>
+
+  <div class="category-section" id="Media">
+    <div class="category-title">Video / Audio / Multimedia</div>
+    <div class="ai-container" id="container-Media"></div>
+  </div>
+
+  <div class="category-section" id="General">
+    <div class="category-title">General Assistants & Productivity</div>
+    <div class="ai-container" id="container-General"></div>
+  </div>
+
+  <footer>
+    &copy; 2025 Iftakhar Ali. Built with ❤️ and HTML + CSS + JS
+  </footer>
+
+  <script>
+    const aiTools = [
+      { name: "ChatGPT", desc: "OpenAI’s conversational AI for text generation, writing, and more.", url: "https://chat.openai.com/", logo: "https://upload.wikimedia.org/wikipedia/commons/0/04/OpenAI_Logo.svg", category: "General", price: "Freemium" },
+      { name: "DeepSeek", desc: "Generative AI & search engine hybrid with powerful LLM models.", url: "https://deepseek.com/", logo: "https://seeklogo.com/images/D/DeepSeek_logo_PNG10.png", category: "General", price: "Freemium" },
+      { name: "Blackbox AI", desc: "AI coding assistant with autocomplete and debugging tools.", url: "https://blackbox.ai/", logo: "https://blackbox.ai/favicon.ico", category: "CodeAssist", price: "Freemium" },
+      { name: "Gemini", desc: "Google's multimodal assistant: chat, creation, tasks, etc.", url: "https://gemini.google.com/", logo: "https://www.google.com/favicon.ico", category: "General", price: "Freemium" },
+      { name: "Jasper AI", desc: "Write marketing content, blogs, ads etc.", url: "https://www.jasper.ai/", logo: "https://www.jasper.ai/favicon.ico", category: "Writing", price: "Paid / Freemium" },
+      { name: "Copy.ai", desc: "Generate copy, taglines, product descriptions.", url: "https://www.copy.ai/", logo: "https://www.copy.ai/favicon.ico", category: "Writing", price: "Freemium" },
+      { name: "Grammarly", desc: "Grammar, style, tone correction.", url: "https://www.grammarly.com/", logo: "https://www.grammarly.com/favicon.ico", category: "Writing", price: "Freemium" },
+      { name: "Writesonic", desc: "AI assistant for writing articles & ads.", url: "https://www.writesonic.com/", logo: "https://www.writesonic.com/favicon.ico", category: "Writing", price: "Freemium" },
+      { name: "Rytr", desc: "Generate content quickly and easily.", url: "https://rytr.me/", logo: "https://rytr.me/favicon.ico", category: "Writing", price: "Freemium" },
+      { name: "DALL·E", desc: "Create images from text prompts.", url: "https://openai.com/dall-e", logo: "https://openai.com/favicon.ico", category: "ImageGen", price: "Freemium" },
+      { name: "Midjourney", desc: "Generate artistic visuals from descriptions.", url: "https://midjourney.com/", logo: "https://cdn.midjourney.com/favicon.ico", category: "ImageGen", price: "Paid" },
+      { name: "Stable Diffusion", desc: "Open-source model for high-quality images.", url: "https://stability.ai/", logo: "https://stability.ai/favicon.ico", category: "ImageGen", price: "Open Source" },
+      { name: "Adobe Firefly", desc: "AI image generation tools for creatives.", url: "https://www.adobe.com/products/firefly.html", logo: "https://www.adobe.com/favicon.ico", category: "ImageGen", price: "Paid" },
+      { name: "DreamStudio", desc: "Run Stable Diffusion via a web interface.", url: "https://dreamstudio.ai/", logo: "https://dreamstudio.ai/favicon.ico", category: "ImageGen", price: "Freemium" },
+      { name: "GitHub Copilot", desc: "AI pair programmer inside your editor.", url: "https://github.com/features/copilot", logo: "https://github.githubassets.com/favicons/favicon.svg", category: "CodeAssist", price: "Paid" },
+      { name: "Tabnine", desc: "Smart code completion in many editors.", url: "https://www.tabnine.com/", logo: "https://www.tabnine.com/favicon.ico", category: "CodeAssist", price: "Paid / Freemium" },
+      { name: "Replit Ghostwriter", desc: "Code assistant inside Replit environment.", url: "https://replit.com/", logo: "https://replit.com/favicon.ico", category: "CodeAssist", price: "Freemium" },
+      { name: "Codeium", desc: "Code completions & dev tools for many languages.", url: "https://codeium.com/", logo: "https://codeium.com/favicon.ico", category: "CodeAssist", price: "Free / Freemium" },
+      { name: "Descript", desc: "Audio & video editing + transcription.", url: "https://www.descript.com/", logo: "https://www.descript.com/favicon.ico", category: "Media", price: "Paid / Freemium" },
+      { name: "ElevenLabs", desc: "Realistic voice synthesis.", url: "https://elevenlabs.io/", logo: "https://elevenlabs.io/favicon.ico", category: "Media", price: "Paid / Freemium" },
+      { name: "Pictory", desc: "Create videos from scripts/text.", url: "https://pictory.ai/", logo: "https://pictory.ai/favicon.ico", category: "Media", price: "Freemium" },
+      { name: "Synthesia", desc: "Generate video avatars with AI voice.", url: "https://www.synthesia.io/", logo: "https://www.synthesia.io/favicon.ico", category: "Media", price: "Paid" },
+      { name: "Lumen5", desc: "Convert blog posts to videos quickly.", url: "https://lumen5.com/", logo: "https://lumen5.com/favicon.ico", category: "Media", price: "Freemium" },
+      { name: "Chatsonic", desc: "Conversation + search combination tool.", url: "https://chatsonic.com/", logo: "https://chatsonic.com/favicon.ico", category: "General", price: "Freemium" }
+    ];
+
+    function renderByCategory(tools) {
+      const cats = ["Writing","ImageGen","CodeAssist","Media","General"];
+      cats.forEach(cat => {
+        const cont = document.getElementById("container-" + cat);
+        cont.innerHTML = "";  // clear
+      });
+
+      tools.forEach(tool => {
+        const card = document.createElement('div');
+        card.className = 'ai-card';
+        card.setAttribute('tabindex','0');
+        card.setAttribute('role','link');
+        card.setAttribute('aria-label','Open ' + tool.name);
+
+        card.innerHTML = `
+          <img src="${tool.logo}" alt="${tool.name} logo" class="ai-logo" />
+          <div class="ai-name">${tool.name}</div>
+          <div class="ai-desc">${tool.desc}</div>
+          <div class="ai-price">${tool.price}</div>
+        `;
+
+        card.addEventListener('click', () => window.open(tool.url, '_blank', 'noopener'));
+        card.addEventListener('keydown', e => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            window.open(tool.url, '_blank', 'noopener');
+          }
+        });
+
+        const containerDiv = document.getElementById("container-" + tool.category);
+        if (containerDiv) {
+          containerDiv.appendChild(card);
+        }
+      });
+
+      // reveal categories as they load
+      const sections = document.querySelectorAll('.category-section');
+      sections.forEach((sec, idx) => {
+        setTimeout(() => sec.classList.add('visible'), 100 * idx);
+      });
+    }
+
+    // Dark/light toggle
+    const modeToggle = document.getElementById('modeToggle');
+    modeToggle.addEventListener('click', () => {
+      document.body.classList.toggle('light-mode');
+    });
+
+    const searchInput = document.getElementById('search-input');
+    searchInput.addEventListener('input', () => {
+      const q = searchInput.value.toLowerCase().trim();
+      const filtered = aiTools.filter(tool => {
+        return tool.name.toLowerCase().includes(q)
+          || tool.desc.toLowerCase().includes(q)
+          || tool.category.toLowerCase().includes(q);
+      });
+      renderByCategory(filtered);
+    });
+
+    // Initial render
+    renderByCategory(aiTools);
+
+  </script>
+
+</body>
+</html>
